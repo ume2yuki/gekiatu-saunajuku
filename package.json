@@ -16,5 +16,10 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
     "babel-loader": "^8.2.2",
     "webpack-dev-server": "3"
-  }
+  },
+   "scripts": {
+    
+     "develop": "NODE_OPTIONS='--openssl-legacy-provider' gatsby develop"
+      }
 }
+
