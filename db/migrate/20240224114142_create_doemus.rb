@@ -11,7 +11,7 @@ class CreateDoemus < ActiveRecord::Migration[6.1]
       t.text :access
 
       t.timestamps
-      add_column :doemus, :image, :string
+      
     end
   end
 end

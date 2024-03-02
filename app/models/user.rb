@@ -8,7 +8,7 @@ class User < ApplicationRecord
    has_many :likes, dependent: :destroy
    has_many :liked_doemus, through: :likes, source: :doemu
    
-   has_many :doemus, dependent: :destroy
+  
    validates :name, presence: true 
    validates :profile, length: { maximum: 200 } 
 
