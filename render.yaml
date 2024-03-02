@@ -1,0 +1,21 @@
+databases:
+  - name: gekiatusaunajuku_DB
+    databaseName: gekiatusaunajuku_db
+    user: gekiatu-saunajuku
+    region: singapore
+
+services:
+  - type: web
+    name: gekiatu-saunajuku
+    env: ruby
+    region: singapore
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gekiatusaunajuku_DB
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
