@@ -1,0 +1,131 @@
+<%= link_to "ログイン", doemus_path %>
+<%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
+<%= link_to "新規登録", new_user_registration_path %>
+<h1>umeume</h1>
+<h3>Doemu一覧</h3>
+<%= link_to "新規投稿へ", new_doemu_path %>
+<div class="doemus-container">
+  
+  
+
+  <% if user_signed_in? %>
+   <%= link_to "マイページへ", user_path(current_user.id) %>
+  <% end %>
+
+  <% @doemus.each do |t| %>
+    <div class="doemu">
+      <%= link_to t.user.name, user_path(t.user.id) %>
+      <%= t.user.email %>
+      <%= t.name %>
+      
+      <%= image_tag t.image_url if t.image? %>
+
+      <% if user_signed_in? %>
+       <% if current_user.already_liked?(t) %>
+          <%= link_to doemu_like_path(id: t.id, doemu_id: t.id), method: :delete do %>
+              <p>いいねを取り消す</p><%= t.likes.count %>
+          <% end %>
+       <% else %>
+          <%= link_to doemu_likes_path(id: t.id, doemu_id: t.id), method: :post do %>
+              <p>いいね</p><%= t.likes.count %>
+          <% end %>
+        <% end %>
+          
+      
+       <% else %>
+       <p>いいねの数 = </p><%= t.likes.count %>
+       <% end %>
+      
+      <%= link_to "詳細へ", doemu_path(t.id) %>
+      
+        <div class="doemu">
+          <%= t.name %>
+          <%= t.created_at %>
+    
+    
+    
+        <div>
+        <h2>総合評価：
+        <span class="star-rating">
+           <span class="star-rating-front" style="width: <%= getPercent(t.overall) %>%;">★★★★★</span>
+           <span class="star-rating-back">★★★★★</span>
+        </span> 
+        </h2>
+        </div>
+        
+        
+        
+        
+        
+        <div>
+        <h2>サウナレベル：
+        <span class="star-rating">
+           <span class="star-rating-front" style="width: <%= getPercent(t.level) %>%;">★★★★★</span>
+           <span class="star-rating-back">★★★★★</span>
+        </span>
+        </h2>
+        </div>
+        
+        
+        </div>
+    
+    
+      <%= link_to "編集する", edit_doemu_path(t.id) %> 
+      <%= button_to "削除する", doemu_path(t.id), method: :delete %>
+      
+  
+      
+    <% end %>
+  </div>
+      <h2>gmap</h2>
+        <input id="address" type="textbox" value="GeekSalon">
+        <input type="button" value="Encode" onclick="codeAddress()">
+        <div id="display"></div>
+        <div id='map'></div>
+
+        <style>
+        #map {
+        height: 600px;
+        width: 600px;
+         }
+      </style>
+
+      <script>
+      let map
+      let geocoder
+      function initMap(){
+      geocoder = new google.maps.Geocoder()
+
+      map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.7828, lng:-73.9653},
+      zoom: 12,
+      });
+
+      marker = new google.maps.Marker({
+      position:  {lat: 40.7828, lng:-73.9653},
+      map: map
+      });
+      }
+      
+
+      function codeAddress(){
+        let inputAddress = document.getElementById('address').value;
+
+      geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+        if (status == 'OK') {
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+          display.textContent = "検索結果：" + results[ 0 ].geometry.location
+        } else {
+          alert('該当する結果がありませんでした：' + status);
+        }
+      });   
+    } 
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_API'] %>&callback=initMap" async defer></script>
+
+
+  

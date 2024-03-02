@@ -1,0 +1,59 @@
+<h1>umeume</h1>
+<h3>Doemu詳細</h3>
+<div class="doemu">
+  <p><%= @doemu.name %></p>
+  <p><%= @doemu.created_at %></p>
+  <% if user_signed_in? %>
+      <% if current_user.already_liked?(@doemu) %>
+        <%= link_to doemu_like_path(@doemu), method: :delete do %>
+          <p>いいねを取り消す</p><%= @doemu.likes.count %>
+        <% end %>
+      <% else %>
+        <%= link_to doemu_likes_path(@doemu), method: :post do %>
+          <p>いいね</p><%= @doemu.likes.count %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p>いいねの数 = </p><%= @doemu.likes.count %>
+    <% end %>
+  <%= link_to "編集する", edit_doemu_path(@doemu.id) %>
+</div>
+
+<h2>いいねしたユーザー</h2>
+<% @doemu.liked_users.each do |user| %>
+  <li><%= user.email %></li>
+<% end %>
+  
+  <p><%= @doemu.about %></p>
+  <p><%= @doemu.money %></p>
+  <p><%= @doemu.access %></p>
+</div>
+
+<h1>users#show</h1>
+<%= @doemu.user.name %>
+
+
+
+
+<div class="comment-wrapper">
+<p>コメント一覧</p>
+<% @comments.each do |c| %>
+  <div>
+    <%= c.user.email unless c.user.blank? %>
+    <br>
+    <%= c.content %>
+  </div>
+    <br>
+<% end %>
+
+<% if user_signed_in? %>
+  <%= form_with(model: [@doemu, @comment], local: true) do |f| %>
+    <%= f.text_area :content %>
+    <%= button_tag type: "submit" do %>
+      <i class="far fa-comments"></i> コメントする
+    <% end %>
+  <% end %>
+<% end %>
+</div>
+
+<%= link_to "Doemu一覧に戻る", doemus_path %>
