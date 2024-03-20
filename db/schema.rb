@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_02_163449) do
+ActiveRecord::Schema.define(version: 2024_03_20_175307) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(version: 2024_03_02_163449) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "overall"
     t.integer "level"
+    t.float "lat"
+    t.float "lng"
   end
 
   create_table "likes", force: :cascade do |t|

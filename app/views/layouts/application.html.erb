@@ -5,12 +5,28 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    <script src="https://kit.fontawesome.com/c1b1cd6975.js" crossorigin="anonymous"></script>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+   <header>
+      激熱サウナ塾
+      <%= link_to "ホーム", doemus_path %>
+      <%= link_to "新規投稿", new_doemu_path %>
+      <%= link_to "ログイン", doemus_path %>
+      <%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
+      <%= link_to "新規登録", new_user_registration_path %>
+      <% if user_signed_in? %>
+      <%= link_to "マイページへ", user_path(current_user.id) %>
+      <% end %>
+
+      
+      
+   </header>
+    <main>
+     <%= yield %>
+    </main>
   </body>
 </html>

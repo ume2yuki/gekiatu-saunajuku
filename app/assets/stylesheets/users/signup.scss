@@ -1,0 +1,23 @@
+.sign_up {
+   width: 100%;
+   background-color: blue($color: #000000);
+   padding: 70px;
+
+ .sign_up_box {
+    width: 880px;
+    height: 803px;
+    background-color: rgb(141, 76, 76);
+    margin: auto;
+    .title_area{
+      width: 880;
+      height: 200px;
+      background-color: green;
+
+      .title{
+       width: 670;
+       height: 80px;
+       background-color: white;
+      }
+    }
+  } 
+}

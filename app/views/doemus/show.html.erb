@@ -1,40 +1,102 @@
-<h1>umeume</h1>
-<h3>Doemu詳細</h3>
-<div class="doemu">
-  <p><%= @doemu.name %></p>
-  <p><%= @doemu.created_at %></p>
-  <% if user_signed_in? %>
-      <% if current_user.already_liked?(@doemu) %>
-        <%= link_to doemu_like_path(@doemu), method: :delete do %>
-          <p>いいねを取り消す</p><%= @doemu.likes.count %>
-        <% end %>
-      <% else %>
-        <%= link_to doemu_likes_path(@doemu), method: :post do %>
-          <p>いいね</p><%= @doemu.likes.count %>
-        <% end %>
-      <% end %>
-    <% else %>
-      <p>いいねの数 = </p><%= @doemu.likes.count %>
-    <% end %>
-  <%= link_to "編集する", edit_doemu_path(@doemu.id) %>
+<div class="sarugutuwa">
+  <h1>サウナ詳細</h1>
+    </div>
+<div class="tejou">
+ <div class="hanahukku">
+  <p><%= image_tag @doemu.image_url, size: "800x500" if @doemu.image? %></p>
+ </div>
+ <div class="mekakushi">
+    <p>サウナ名:<%= @doemu.name %></p>
+    <p>サウナの説明:<%= @doemu.about %></p>
+    <p>金額:<%= @doemu.money %></p>
+    <p>アクセスについて<%= @doemu.access %></p>
+    <p>住所<%= @doemu.address %></p>
+    
+    <% if user_signed_in? %>
+              <% if current_user.already_liked?(@doemu) %>
+                <%= link_to doemu_like_path(id: @doemu.id, doemu_id: @doemu.id), method: :delete do %>
+                  <i class="fas fa-heart"></i><%= @doemu.likes.count %>
+                <% end %>
+              <% else %>
+                <%= link_to doemu_likes_path(id: @doemu.id, doemu_id: @doemu.id), method: :post do %>
+                  <i class="far fa-heart"></i><%= @doemu.likes.count %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <i class="far fa-heart"></i><%= @doemu.likes.count %>
+            <% end %>
+ </div>
 </div>
 
-<h2>いいねしたユーザー</h2>
-<% @doemu.liked_users.each do |user| %>
-  <li><%= user.email %></li>
-<% end %>
-  
-  <p><%= @doemu.about %></p>
-  <p><%= @doemu.money %></p>
-  <p><%= @doemu.access %></p>
+<div class="tabako">
+ <div class="maruboro">
+<h2>総合評価<br>
+<span class="star-rating">
+   <span class="star-rating-front" style="width: <%= getPercent(@doemu.overall) %>%;">★★★★★</span>
+   <span class="star-rating-back">★★★★★</span>
+</span> 
+</h2>
+
+
+<h2>サウナレベル<br>
+<span class="star-rating">
+   <span class="star-rating-front" style="width: <%= getPercent(@doemu.level) %>%;">★★★★★</span>
+   <span class="star-rating-back">★★★★★</span>
+</span>
+</h2>
 </div>
 
-<h1>users#show</h1>
+<div class="cola">
+<h2>Google Map</h2>
+<div id='show-map'></div>
+<style>
+#show-map {
+  height: 400px;
+  width: 70%;
+}
+</style>
+<!-- JavaScript部分 -->
+<script>
+  function initShowMap() {
+    let showMap = new google.maps.Map(document.getElementById('show-map'), {
+      zoom: 12,
+      center: { lat: <%= @doemu.lat %>, lng: <%= @doemu.lng %> },
+      styles: [
+        {
+          stylers: [
+            { "saturation": 0 },
+            { "lightness": 0 }
+          ]
+        }
+      ]
+    });
+    // マーカーを表示
+    let marker = new google.maps.Marker({
+      position: { lat: <%= @doemu.lat %>, lng: <%= @doemu.lng %> },
+      map: showMap,
+      title: '<%= @doemu.name %>'
+    });
+    // マーカーをクリックしたとき、詳細情報を表示
+    let infowindow = new google.maps.InfoWindow({
+      content: "<a href='<%= doemu_url(@doemu.id) %>'><%= @doemu.name %></a>"
+    });
+    marker.addListener('click', function() {
+      infowindow.open(showMap, marker);
+    });
+  }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkxCV4XGBt1l8ID4gCPcOBXv-Ny71LwLE&callback=initShowMap" async defer></script>
+</div>
+</div>
+<h1>レビュー！</h1>
 <%= @doemu.user.name %>
-
-
-
-
+<% if user_signed_in? %>
+  <%= form_with(model: [@doemu, @comment], local: true) do |f| %>
+    <%= f.text_area :content %>
+    <%= button_tag type: "submit" do %>
+      <i class="far fa-comments"></i> コメントする
+    <% end %>
 <div class="comment-wrapper">
 <p>コメント一覧</p>
 <% @comments.each do |c| %>
@@ -45,15 +107,9 @@
   </div>
     <br>
 <% end %>
-
-<% if user_signed_in? %>
-  <%= form_with(model: [@doemu, @comment], local: true) do |f| %>
-    <%= f.text_area :content %>
-    <%= button_tag type: "submit" do %>
-      <i class="far fa-comments"></i> コメントする
-    <% end %>
-  <% end %>
+<% end %>
 <% end %>
 </div>
-
-<%= link_to "Doemu一覧に戻る", doemus_path %>
+<%= link_to "一覧に戻る", doemus_path %>
+<%= link_to "編集する", edit_doemu_path(@doemu
+.id) %>

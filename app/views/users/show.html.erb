@@ -1,4 +1,4 @@
-<h1>users#show</h1>
+<h1>ユーザーマイページ</h1>
 <p>名前 : <%= @user.name %></p>
 <p>メールアドレス : <%= @user.email %></p>
 <p>プロフィール : <%= @user.profile %></p>
@@ -11,7 +11,10 @@
 <% @user.doemus.each do |t| %>
   <%= t.user.name %>
   <%= t.name %>
+  <%= link_to "編集する", edit_doemu_path(t.id) %> 
+  <%= button_to "削除する", doemu_path(t.id), method: :delete %>
 <% end %>
+
 
 <!-- 以下はいいね機能を実装している場合-->
 <h2>ユーザーがいいねした投稿一覧</h2>
@@ -20,4 +23,4 @@
   <%= t.name %>
 <% end %>
 
-<%= link_to "doemu一覧に戻る", doemus_path %>
+<%= link_to "投稿一覧に戻る", doemus_path %>

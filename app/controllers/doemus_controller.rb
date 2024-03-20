@@ -41,6 +41,6 @@ class DoemusController < ApplicationController
     
     private
     def doemu_params
-        params.require(:doemu).permit(:name, :about, :money, :access, :image, :overall, :level)
+        params.require(:doemu).permit(:name, :about, :money, :access, :image, :overall, :level, :lat, :lng)
     end
 end
